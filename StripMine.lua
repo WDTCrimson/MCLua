@@ -1,7 +1,11 @@
 local counter = 0
+local distance = 0
 
 function minePil()
-	turtle.dig()
+	while detect() do
+		turtle.dig()
+	end
+	turtle.forward()
 	turtle.digUp()
 	turtle.digDown()
 end
@@ -13,7 +17,7 @@ function torch()
 end
 
 local function digStrip(deep)
-	for i=1,deep do
+	for i = 1, deep do
 		minePil()
 		counter = counter + 1
 		if counter == 8 then
