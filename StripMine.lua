@@ -1,12 +1,12 @@
 local counter = 0
 
-local function minePil()
+function minePil()
 	turtle.dig()
 	turtle.digUp()
 	turtle.digDown()
 end
 
-local function torch()
+function torch()
 	turtle.turnLeft()
 	turtle.placeUp()
 	turtle.turnRight()
@@ -71,10 +71,10 @@ print()
 turtle.select(1)
 print("Starting now...")
 
-for j = 1, comstrip do
+for j = 1, comstrips do
 	digStrip(depth)
 	home(depth, rl)
-	if j < comstrip then
+	if j < comstrips then
 		toNext(rl)
 	end
 end

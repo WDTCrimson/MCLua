@@ -17,7 +17,7 @@ local function tunnelSection()
 	turtle.turnLeft()
 	turtle.turnLeft()
 	turtle.forward()
-	turtle.right()
+	turtle.turnRight()
 end
 
 local function torchSection()
@@ -27,11 +27,12 @@ local function torchSection()
 	turtle.turnRight()
 	turtle.turnRight()
 	turtle.forward()
-	turtle.left()
+	turtle.turnLeft()
 end
 
 print("Depth: ")
-local depth = io.read("*n")
+local depth = io.read()
+depth = tonumber(depth)
 
 turtle.select(1)
 
