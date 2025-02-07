@@ -49,7 +49,7 @@ print("1")
 sleep(1)
 print("Tunneling now!")
 
-for 1, depth do
+for i=1, depth do
 	tunnelSection()
 	counter = counter + 1
 	if counter==8 then
