@@ -7,6 +7,11 @@ currentDir = "N"
 lastx = 1
 lasty = 1
 lastDir = "N"
+OVERWORLDJUNK = {"minecraft:dirt", "minecraft:cobblestone", "minecraft:gravel"}
+NETHERJUNK = {"minecraft:netherrack", "minecraft:gravel"}
+HASJUNK = false
+FULL = true
+QUARRYMODE = ""
 
 -- Initialize Tables that will handle compass directions and a bespoke coordinate system
 
@@ -28,6 +33,8 @@ MOVEVALUES["N"] = 1
 MOVEVALUES["S"] = -1
 MOVEVALUES["E"] = 1
 MOVEVALUES["S"] = -1
+
+-- Functions
 
 function digS()
 	while turtle.detect() do
@@ -56,10 +63,20 @@ end
 
 function initialize()
 	io.write("Initializing Simple Quarry\n")
+	io.write("Please put a bucket of lava in the first slot")
 	io.write("Please enter the length of the quarry: ")
 	length = tonumber(io.read())
 	io.write("Please enter the width of the quarry: ")
 	width = tonumber(io.read())
+	io.write("Please enter the mode of quarry: ")
+	io.write("1 = Overworld\n2 = Nether\n")
+	QUARRYMODE = io.read()
+	QUARRYMODE = tonumber(QUARRYMODE)
+	if QUARRYMODE == 1 then
+		mode = "overworld"
+	elseif QUARRYMODE == 2 then
+		mode = "nether"
+	end
 	io.write("Starting Quarry\n")
 	digS()
 	x = 1
@@ -89,7 +106,7 @@ function home(direction)
 		x = updateCoords(x, direction)
 	end
 	turtle.turnLeft()
-	compass(direction, "left")
+	currentDir = compass(direction, "left")
 	for i = y, 1, -1 do
 		turtle.forward()
 		y = updateCoords(y, direction)
@@ -98,14 +115,14 @@ function home(direction)
 end
 
 function deposit()
-	for l = 3, 12 do
+	for l = 2, 16 do
 		turtle.select(l)
 		turtle.drop()
 	end
 	turtle.turnRight()
-	compass(currentDir, "right")
+	currentDir = compass(currentDir, "right")
 	turtle.turnRight()
-	compass(currentDir, "right")
+	currentDir = compass(currentDir, "right")
 	turtle.forward()
 end
 
@@ -115,38 +132,83 @@ function resume()
 		x = updateCoords(x, currentDir)
 	end
 	turtle.turnRight()
-	compass(currentDir, "right")
+	currentDir = compass(currentDir, "right")
 	for j = y, lasty do
 		turtle.forward()
 		y = updateCoords(y, currentDir)
 	end
 	if lastDir == "N" then
 		turtle.turnLeft()
-		compass(lastDir, "left")
+		currentDir = compass(lastDir, "left")
 	elseif lastDir == "S" then
 		turtle.turnRight()
-		compass(lastDir, "right")
+		currentDir = compass(lastDir, "right")
 	end
 end
 
+function removeJunk(mode)
+	turtle.select(1)
+	turtle.dropDown()
+	for i = 2, 16 do
+		turtle.select(i)
+		if mode == "overworld" then
+			for j = 1, #OVERWORLDJUNK do
+				if turtle.getItemDetail(i).name == OVERWORLDJUNK[j] then
+					turtle.dropDown()
+					HASJUNK = true
+				end
+			end
+		elseif mode == "nether" then
+			for j = 1, #NETHERJUNK do
+				if turtle.getItemDetail(i).name == NETHERJUNK[j] then
+					turtle.dropDown()
+					HASJUNK = true
+				end
+			end
+		end
+	end
+end
+
+function checkInventory()
+	for l = 2, 16 do
+		if turtle.getItemCount(l) == 0 then
+			return false
+		end
+	end
+	return true
+end
+
+-- Main Driver
+
+initialize()
 for i = 1, width do
 	for j = 1, length-1 do
 		digS()
 		x = updateCoords(x, currentDir)
-	end
+		FULL = checkInventory()
+		if FULL == true then
+			removeJunk(mode)
+			if HASJUNK == false then
+				home(currentDir)
+				deposit()
+				resume()
+			end
+			HASJUNK = false
+		end
 	if currentDir == "N" then
 		turtle.turnRight()
-		compass(currentDir, "right")
+		currentDir = compass(currentDir, "right")
 		digS()
 		x = updateCoords(x, currentDir)
 		turtle.turnRight()
-		compass(currentDir, "right")
+		currentDir = compass(currentDir, "right")
 	elseif currentDir == "S" then
 		turtle.turnLeft()
-		compass(currentDir, "left")
+		currentDir = compass(currentDir, "left")
 		digS()
 		x = updateCoords(x, currentDir)
 		turtle.turnLeft()
-		compass(currentDir, "left")
+		currentDir = compass(currentDir, "left")
+		end
 	end
 end
