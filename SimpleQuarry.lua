@@ -148,19 +148,19 @@ end
 
 function removeJunk(mode)
 	turtle.select(1)
-	turtle.dropDown()
+	turtle.placeDown()
 	for i = 2, 16 do
 		turtle.select(i)
 		if mode == "overworld" then
 			for j = 1, #OVERWORLDJUNK do
-				if turtle.getItemDetail(i).name == OVERWORLDJUNK[j] then
+				if turtle.getItemDetail(i)["name"] == OVERWORLDJUNK[j] then
 					turtle.dropDown()
 					HASJUNK = true
 				end
 			end
 		elseif mode == "nether" then
 			for j = 1, #NETHERJUNK do
-				if turtle.getItemDetail(i).name == NETHERJUNK[j] then
+				if turtle.getItemDetail(i)["name"] == NETHERJUNK[j] then
 					turtle.dropDown()
 					HASJUNK = true
 				end
