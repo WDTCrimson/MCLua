@@ -196,19 +196,25 @@ for i = 1, width do
 			HASJUNK = false
 		end
 	end
-	if currentDir == "N" then
-		turtle.turnRight()
-		currentDir = compass(currentDir, "right")
-		digS()
-		x = updateCoords(x, currentDir)
-		turtle.turnRight()
-		currentDir = compass(currentDir, "right")
-	elseif currentDir == "S" then
-		turtle.turnLeft()
-		currentDir = compass(currentDir, "left")
-		digS()
-		x = updateCoords(x, currentDir)
-		turtle.turnLeft()
-		currentDir = compass(currentDir, "left")
+
+	if i ~= width then
+		if currentDir == "N" then
+			turtle.turnRight()
+			currentDir = compass(currentDir, "right")
+			digS()
+			x = updateCoords(x, currentDir)
+			turtle.turnRight()
+			currentDir = compass(currentDir, "right")
+		elseif currentDir == "S" then
+			turtle.turnLeft()
+			currentDir = compass(currentDir, "left")
+			digS()
+			x = updateCoords(x, currentDir)
+			turtle.turnLeft()
+			currentDir = compass(currentDir, "left")
+			end
+		else
+			home(currentDir)
+			deposit()
 		end
 end
