@@ -195,6 +195,7 @@ for i = 1, width do
 			end
 			HASJUNK = false
 		end
+	end
 	if currentDir == "N" then
 		turtle.turnRight()
 		currentDir = compass(currentDir, "right")
@@ -210,5 +211,4 @@ for i = 1, width do
 		turtle.turnLeft()
 		currentDir = compass(currentDir, "left")
 		end
-	end
 end
